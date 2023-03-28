@@ -15,6 +15,12 @@ from scheduler import CycleScheduler
 import audio2mel
 from datasets import get_dataset_filelist
 
+####################
+import wandb
+####################
+wandb.init(project='dcase_project', name='vqvae_training')
+
+
 
 def train(epoch, loader, model, optimizer, scheduler, device):
     model.train()
@@ -46,6 +52,10 @@ def train(epoch, loader, model, optimizer, scheduler, device):
         mse_n = img.shape[0]
 
         lr = optimizer.param_groups[0]["lr"]
+        
+        ##################
+        wandb.log({'epoch': {epoch+1}; 'MSE_train': {recon_loss.item()}; 'latent_train': {latent_loss.item()}; 'Avg MSE_train': {mse_sum / mse_n}; 'lr': {lr} })
+        ##################
 
         loader.set_description(
             (
@@ -92,6 +102,10 @@ def test(epoch, loader, model, optimizer, scheduler, device):
                 pass
 
     latent_diff = latent_loss.item()
+    ##################
+    wandb.log({'epoch': {epoch+1}; 'MSE_test': {recon_loss.item()}; 'latent_test': {latent_loss.item()}; 'Avg MSE_test': {mse_sum / mse_n} })
+    ##################
+
     if (epoch + 1) % 10 == 0:
         print(
             f"\nTest_Epoch: {epoch + 1}; "
