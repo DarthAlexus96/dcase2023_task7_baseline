@@ -54,7 +54,7 @@ def train(epoch, loader, model, optimizer, scheduler, device):
         lr = optimizer.param_groups[0]["lr"]
         
         ##################
-        wandb.log({'epoch': {epoch+1}, 'MSE_train': {recon_loss.item()}, 'latent_train': {latent_loss.item()}, 'Avg MSE_train': {mse_sum / mse_n}, 'lr': {lr} })
+        #wandb.log({'epoch': {epoch+1}, 'MSE_train': {recon_loss.item()}, 'latent_train': {latent_loss.item()}, 'Avg MSE_train': {mse_sum / mse_n}, 'lr': {lr} })
         ##################
 
         loader.set_description(
