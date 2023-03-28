@@ -7,6 +7,12 @@ from torch import nn, optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+####################
+import wandb
+
+wandb.init(project='dcase_project', name='pixelsnail_training')
+####################
+
 amp = None
 
 from datasets import LMDBDataset
@@ -47,6 +53,10 @@ def train(epoch, loader, model, optimizer, scheduler, device):
         accuracy = correct.sum() / target.numel()
 
         lr = optimizer.param_groups[0]['lr']
+        
+        ######################
+        wandb.log({'epoch': {epoch+1}, 'loss': {loss.item()}, 'acc': {accuracy}, 'lr': {lr} })
+        ######################
 
         loader.set_description(
             (
